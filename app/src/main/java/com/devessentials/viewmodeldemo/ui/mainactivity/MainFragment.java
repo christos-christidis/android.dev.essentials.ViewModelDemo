@@ -1,5 +1,6 @@
 package com.devessentials.viewmodeldemo.ui.mainactivity;
 
+import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -42,7 +43,19 @@ public class MainFragment extends Fragment {
         mResultText = getView().findViewById(R.id.resultText);
         Button convertButton = getView().findViewById(R.id.convertButton);
 
-        mResultText.setText(mViewModel.getResult().toString());
+        final Observer<Float> resultObserver = new Observer<Float>() {
+            @Override
+            public void onChanged(@Nullable Float result) {
+                if (result != null) {
+                    mResultText.setText(result.toString());
+                }
+            }
+        };
+
+        // The LiveData observes the lifecycle of this fragment. resultObserver will be called when
+        // a) the data changes while the fragment is active and b) when the fragment goes from
+        // inactive to active (active = started or resumed).
+        mViewModel.getResult().observe(this, resultObserver);
 
         convertButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -51,7 +64,10 @@ public class MainFragment extends Fragment {
                     mResultText.setText(R.string.no_value);
                 } else {
                     mViewModel.setAmount(mDollarText.getText().toString());
-                    mResultText.setText(mViewModel.getResult().toString());
+
+                    // SOS: No need for this. setAmount changes the LiveData, which in turn calls
+                    // resultObserver which updates the view...
+//                    mResultText.setText(mViewModel.getResult().toString());
                 }
             }
         });
