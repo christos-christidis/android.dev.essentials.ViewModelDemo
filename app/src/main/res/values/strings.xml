@@ -1,5 +1,4 @@
 <resources>
     <string name="app_name">ViewModel Demo</string>
     <string name="convert">Convert</string>
-    <string name="no_value">No value</string>
 </resources>

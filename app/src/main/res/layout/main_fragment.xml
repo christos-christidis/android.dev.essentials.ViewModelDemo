@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.devessentials.viewmodeldemo.ui.mainactivity.MainViewModel" />
+    </data>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/mainactivity"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.mainactivity.MainFragment">
+
+        <!-- SOS: unfortunately, it seems I can't break the binding expr w newlines :( -->
+        <TextView
+            android:id="@+id/resultText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text='@{viewModel.result == 0 ? "Enter a value" : String.valueOf(viewModel.result) + " euros"}'
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Result text" />
+
+        <!-- SOS: EditTexts w/o id are NOT preserved on rotation. But this EditText does not need one,
+        cause the layout calls getDollarString anyway when it's re-created! -->
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="51dp"
+            android:ems="10"
+            android:inputType="numberDecimal"
+            android:text="@={viewModel.dollarString}"
+            app:layout_constraintBottom_toTopOf="@+id/resultText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:ignore="Autofill,LabelFor" />
+    </android.support.constraint.ConstraintLayout>
+</layout>
